@@ -17,7 +17,7 @@ public:
     
     void CalculateScore();
     
-    void OutputResult();
+    void OutputResult(std::string outputFile);
     
     void ConstructString();
 private:
@@ -26,7 +26,8 @@ private:
     
     std::string mSequenceA;
     std::string mSequenceB;
-    
+    std::string mHeaderA;
+    std::string mHeaderB;
     std::string mResultA;
     std::string mResultB;
     

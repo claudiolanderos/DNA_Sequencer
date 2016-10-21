@@ -8,15 +8,18 @@
 
 #include "PairwiseAlignment.h"
 #include "FASTAParser.h"
+#include <fstream>
 
 PairwiseAlignment::PairwiseAlignment(std::string fileA, std::string fileB)
 {
     FASTAParser parser;
     parser.ParseFile(fileA);
     mSequenceA = parser.GetSequence();
+    mHeaderA = parser.GetHeader();
 
     parser.ParseFile(fileB);
     mSequenceB = parser.GetSequence();
+    mHeaderB = parser.GetHeader();
 }
 
 void PairwiseAlignment::CalculateScore()
@@ -27,16 +30,26 @@ void PairwiseAlignment::CalculateScore()
     
     mScoreGrid.resize(lengthA);
     mDirectionGrid.resize(lengthA);
-    for(int i = 0; i < lengthA; i++)
+    for(int a = 0, b= 0 ; a < lengthA; a++)
     {
-        mScoreGrid[i].resize(lengthB);
-        mDirectionGrid[i].resize(lengthB);
+        mScoreGrid[a].resize(lengthB);
+        mDirectionGrid[a].resize(lengthB);
         
         //Initialize arrays
-        mScoreGrid[i][0] = -i;
-        if(i != 0)
+        mScoreGrid[a][0] = -a;
+        if(a != 0)
         {
-            mDirectionGrid[i][0] = Direction::left;
+            mDirectionGrid[a][0] = Direction::left;
+        }
+       
+        if(b < lengthB)
+        {
+            mScoreGrid[0][b] = -b;
+            if(b != 0)
+            {
+                mDirectionGrid[0][b] = Direction::above;
+            }
+            b++;
         }
     }
     
@@ -117,12 +130,12 @@ void PairwiseAlignment::ConstructString()
         else if(dir == Direction::left)
         {
             mResultA += mSequenceA.at(--indexA);
-            mResultB += " ";
+            mResultB += "_";
         }
         else
         {
             mResultB += mSequenceB.at(--indexB);
-            mResultA += " ";
+            mResultA += "_";
         }
     }
     
@@ -160,4 +173,46 @@ void PairwiseAlignment::PrintGraphs()
         }
         std::cout<<std::endl;
     }
+}
+
+void PairwiseAlignment::OutputResult(std::string outputFile)
+{
+    std::ofstream file;
+    file.open(outputFile, std::ios::out | std::ios::trunc);
+    
+    file << "A: " << mHeaderA << "\n";
+    file << "B: " << mHeaderB << "\n";
+    file << "Score: " << mScore << "\n\n";
+    
+    std::string tempB;
+    tempB.reserve(70);
+    std::string sameChar;
+    sameChar.reserve(70);
+    
+    for(int i = 0; i < mResultA.length(); i++)
+    {
+        file << mResultA.at(i);
+        tempB += mResultB.at(i);
+        
+        if(mResultA.at(i) == mResultB.at(i))
+        {
+            sameChar += "|";
+        }
+        else
+        {
+            sameChar += " ";
+        }
+        
+        if(i != 0 && ((i+1) % 70) == 0)
+        {
+            file << "\n" << sameChar << "\n" << tempB << "\n\n";
+            sameChar = "";
+            tempB = "";
+        }
+    }
+    if(tempB != "")
+    {
+        file << "\n" << sameChar << "\n" << tempB << "\n";
+    }
+    file.close();
 }

@@ -21,6 +21,7 @@
 #include "FASTAParser.h"
 #include "FASTATranslator.h"
 #include "PairwiseAlignment.h"
+#include "Timer.h"
 
 enum
 {
@@ -119,18 +120,18 @@ void DNAFrame::OnPairWiseAlignment(wxCommandEvent &event)
     {
         return;
     }
-    else if(alignDlg.ShowModal() != wxID_OK)
-    {
-        //throw exception
-    }
+    
+    Timer timer;
+    timer.Start();
     
     std::string inputPathA, inputPathB, outputPath;
     inputPathA = alignDlg.GetInputAPath();
     inputPathB = alignDlg.GetInputBPath();
     outputPath = alignDlg.GetOutputPath();
     
-    wxBusyInfo wait("Please wait, calculating...");
-    
     PairwiseAlignment alignment = PairwiseAlignment(inputPathA, inputPathB);
     alignment.CalculateScore();
+    alignment.OutputResult(outputPath);
+    
+    std::cout<<timer.GetElapsed();
 }

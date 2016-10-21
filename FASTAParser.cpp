@@ -46,7 +46,6 @@ void FASTAParser::ParseFile(const std::string filePath)
             }
         }
         
-        std::cout<<"Header: " << mHeader << '\n';
         while (file.get(c)) {
             if(c == '\xff')  //end of file
             {
@@ -65,7 +64,6 @@ void FASTAParser::ParseFile(const std::string filePath)
                 mSequence += c;
             }
         }
-        std::cout<<"Sequence: " << mSequence << '\n';
         
         file.close();
         
