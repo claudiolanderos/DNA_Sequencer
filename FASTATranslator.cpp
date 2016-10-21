@@ -62,6 +62,11 @@ void FASTATranslator::Translate(const std::string &sequence)
             case 'Y':
             case 'V':
                 mAminoAcidCount->operator[](charState)++;
+                if(mAminoAcidCount->operator[](charState) > mLargest)
+                {
+                    mLargest = mAminoAcidCount->operator[](charState);
+                    mLargestAmino = charState;
+                }
                 mTotal++;
                 mState = 3;
                 break;
@@ -85,7 +90,13 @@ void FASTATranslator::Translate(const std::string &sequence)
             case 'w':
             case 'y':
             case 'v':
+                charState = std::toupper(charState);
                 mAminoAcidCount->operator[](charState)++;
+                if(mAminoAcidCount->operator[](charState) > mLargest)
+                {
+                    mLargest = mAminoAcidCount->operator[](charState);
+                    mLargestAmino = charState;
+                }
                 mTotal++;
                 mState = 3;
                 i++; //make sure to increment to account for shortcut
@@ -100,4 +111,9 @@ void FASTATranslator::Translate(const std::string &sequence)
 const std::shared_ptr<std::unordered_map<char, int> > FASTATranslator::GetAminoAcidCount() const
 {
     return mAminoAcidCount;
+}
+
+const std::pair<char, int> FASTATranslator::GetLargest() const
+{
+    return std::make_pair(mLargestAmino, mLargest);
 }

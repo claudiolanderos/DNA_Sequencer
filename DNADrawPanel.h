@@ -17,13 +17,10 @@
 class DNADrawPanel : public wxPanel
 {
 public:
-	DNADrawPanel(wxFrame* parent);
+    DNADrawPanel(wxFrame* parent);
 	void PaintNow();
-    
-    void SetAminoAcidCount(std::shared_ptr<std::unordered_map<char, int> > aminoAcidCount){ mAminoAcidCount = aminoAcidCount; }
-    void SetTotal(int total) { mTotal = total; }
-    void SetHeader(std::string& header) { mHeader = header; }
 
+    void SetHistogramVariables(std::shared_ptr<std::unordered_map<char, int> > aminoAcidCount, int total, int largest, std::string header);
 protected:
 	void PaintEvent(wxPaintEvent & evt);
 	void Render(wxDC& dc);
@@ -32,7 +29,9 @@ protected:
 	
 public:
     std::shared_ptr<std::unordered_map<char, int>> mAminoAcidCount;
+    std::unordered_map<char, std::string> mAminoAcidNames;
     int mTotal;
+    int mLargest;
     std::string mHeader;
 };
 

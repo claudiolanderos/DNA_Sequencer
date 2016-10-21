@@ -13,13 +13,15 @@
 
 class FASTATranslator
 {
+    friend class DNADrawPanel;
+    
 public:
     FASTATranslator();
 
     void Translate(const std::string& sequence);
     
-    const int GetTotal() { return mTotal; }
-    
+    const int GetTotal() const { return mTotal; }
+    const std::pair<char, int> GetLargest() const;
     const std::shared_ptr<std::unordered_map<char, int> > GetAminoAcidCount() const;
     
 private:
@@ -50,5 +52,7 @@ private:
     
     int mState = 0;
     int mTotal = 0;
+    char mLargestAmino;
+    int mLargest;
     std::shared_ptr<std::unordered_map<char, int> > mAminoAcidCount;
 };

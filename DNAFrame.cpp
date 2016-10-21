@@ -102,6 +102,8 @@ void DNAFrame::OnAminoHist(wxCommandEvent& event)
         std::cout<<i.first << " " << i.second << std::endl;
     }
     
-    DNADrawPanel panel(this);
+    std::cout<<translator.GetLargest().first << " " << translator.GetLargest().second << std::endl;
+    mPanel->SetHistogramVariables(aminoAcidCount, translator.GetTotal(), translator.GetLargest().second, parser.GetHeader());
     
+    mPanel->PaintNow();
 }
