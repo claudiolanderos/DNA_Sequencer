@@ -12,12 +12,17 @@
 #include <wx/frame.h>
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 class DNADrawPanel : public wxPanel
 {
 public:
 	DNADrawPanel(wxFrame* parent);
 	void PaintNow();
+    
+    void SetAminoAcidCount(std::shared_ptr<std::unordered_map<char, int> > aminoAcidCount){ mAminoAcidCount = aminoAcidCount; }
+    void SetTotal(int total) { mTotal = total; }
+    void SetHeader(std::string& header) { mHeader = header; }
 
 protected:
 	void PaintEvent(wxPaintEvent & evt);
@@ -26,6 +31,8 @@ protected:
 	DECLARE_EVENT_TABLE()
 	
 public:
-	// Variables here
+    std::shared_ptr<std::unordered_map<char, int>> mAminoAcidCount;
+    int mTotal;
+    std::string mHeader;
 };
 

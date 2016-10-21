@@ -14,9 +14,12 @@
 #include <wx/sizer.h>
 #include <wx/filedlg.h>
 #include <wx/busyinfo.h>
+#include <wx/wfstream.h>
 #include "DNADrawPanel.h"
 #include "Exceptions.h"
 #include "DNAAlignDlg.h"
+#include "FASTAParser.h"
+#include "FASTATranslator.h"
 
 enum
 {
@@ -69,5 +72,36 @@ void DNAFrame::OnNew(wxCommandEvent& event)
 
 void DNAFrame::OnAminoHist(wxCommandEvent& event)
 {
-	// TODO: Implement (File>Amino Acid Histogram...)
+    wxFileDialog
+    openFileDialog(this, _(""), "./data", "",
+                   "fasta files (*.fasta)|*.fasta", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;     // the user changed idea...
+    }
+    
+    FASTAParser parser;
+    std::string sequence;
+    try{
+        parser.ParseFile(openFileDialog.GetPath().ToStdString());
+    } catch (FileLoadExcept e)
+    {
+        wxMessageBox("FASTA file is invalid", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+    
+    sequence = parser.GetSequence();
+    
+    FASTATranslator translator;
+    translator.Translate(sequence);
+    
+    auto aminoAcidCount = translator.GetAminoAcidCount();
+    
+    for(auto i : *aminoAcidCount)
+    {
+        std::cout<<i.first << " " << i.second << std::endl;
+    }
+    
+    DNADrawPanel panel(this);
+    
 }

@@ -42,4 +42,26 @@ void DNADrawPanel::Render(wxDC& dc)
 	dc.Clear();
 	
 	// TODO: Draw histogram, if one has been generated
+    dc.SetPen(*wxBLACK_PEN);
+    dc.SetTextForeground(*wxBLACK);
+    
+    // Draw header
+    dc.DrawText(mHeader, 5, 5);
+    
+    // Draw histogram
+    if(mAminoAcidCount != nullptr)
+    {
+        for(auto iter : *mAminoAcidCount)
+        {
+            
+        }
+    }
+    else {
+        // throw exception
+    }
+    //Draw header with some space
+    // for loop to draw all amino acids
+        //First part of for loop draw name
+        //Second part of for loop draw bar
+        
 }
