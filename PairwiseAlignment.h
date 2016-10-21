@@ -19,11 +19,16 @@ public:
     
     void OutputResult();
     
-    void SetMaximum(int indexA, int indexB);
-    
+    void ConstructString();
 private:
+    void SetMaximum(int indexA, int indexB);
+    void PrintGraphs();
+    
     std::string mSequenceA;
     std::string mSequenceB;
+    
+    std::string mResultA;
+    std::string mResultB;
     
     std::vector<std::vector<short>> mScoreGrid;
     std::vector<std::vector<char>> mDirectionGrid;
@@ -38,4 +43,6 @@ private:
     const short Match = 1;
     const short Mismatch = -1;
     const short Gap = -1;
+    
+    int mScore;
 };
