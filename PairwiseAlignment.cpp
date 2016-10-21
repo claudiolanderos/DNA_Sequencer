@@ -53,15 +53,6 @@ void PairwiseAlignment::CalculateScore()
         }
     }
     
-    for(int i = 0; i < lengthB; i++)
-    {
-        mScoreGrid[0][i] = -i;
-        if(i != 0)
-        {
-            mDirectionGrid[0][i] = Direction::above;
-        }
-    }
-    
     for (int i = 1; i < lengthB; i++) {
         for(int x = 1; x < lengthA; x++)
         {
