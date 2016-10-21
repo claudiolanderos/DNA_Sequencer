@@ -16,9 +16,9 @@ public:
     
     void ParseFile(const std::string filePath);
     
-    const std::string & GetSequence() const { return mSequence; }
+    const std::string GetSequence() const { return mSequence; }
     
-    const std::string & GetHeader() const { return mHeader; }
+    const std::string GetHeader() const { return mHeader; }
 private:
     std::string mHeader;
     std::string mSequence;

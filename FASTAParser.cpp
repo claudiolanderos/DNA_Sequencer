@@ -17,6 +17,8 @@ FASTAParser::FASTAParser()
 
 void FASTAParser::ParseFile(const std::string filePath)
 {
+    mSequence = "";
+    mHeader = "";
     std::ifstream::pos_type size;
     // Open the file for input and start ATE (at the end)
     std::ifstream file (filePath, std::ios::in|std::ios::ate);

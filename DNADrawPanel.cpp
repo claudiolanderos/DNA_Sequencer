@@ -72,13 +72,13 @@ void DNADrawPanel::Render(wxDC& dc)
     dc.SetTextForeground(*wxBLACK);
     
     // Draw header
-    dc.DrawText(mHeader, 5, 5);
+    dc.DrawText(mHeader, 15, 5);
     dc.SetBrush(*wxRED_BRUSH);
     
     // Draw histogram
     if(mAminoAcidCount != nullptr)
     {
-        int spacing = 30;
+        int spacing = 50;
         std::stringstream ss;
         int counter = 1;
         int color = 1;
@@ -105,7 +105,7 @@ void DNADrawPanel::Render(wxDC& dc)
             ss << mAminoAcidNames[iter.first] << ": "
             << std::fixed << std::setprecision(2) << ((float)iter.second/(float)mTotal)*100
             << "% (" << iter.second << ")";
-            dc.DrawText(ss.str(), 10, spacing);
+            dc.DrawText(ss.str(), 15, spacing+5);
             dc.DrawRectangle(wxPoint(200, spacing), wxSize(((float)iter.second/(float)mLargest)*800, 30));
             spacing += 30;
         }

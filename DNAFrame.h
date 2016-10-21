@@ -20,7 +20,8 @@ private:
 	void OnExit(wxCommandEvent& event);
 	void OnNew(wxCommandEvent& event);
 	void OnAminoHist(wxCommandEvent& event);
-	
+    void OnPairWiseAlignment(wxCommandEvent& event);
+    
 	wxDECLARE_EVENT_TABLE();
 private:
 	// Panel for drawing

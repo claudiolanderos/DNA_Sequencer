@@ -20,16 +20,19 @@
 #include "DNAAlignDlg.h"
 #include "FASTAParser.h"
 #include "FASTATranslator.h"
+#include "PairwiseAlignment.h"
 
 enum
 {
 	ID_AMINO_HIST=1000,
+    ID_PAIRWISE=1001,
 };
 
 wxBEGIN_EVENT_TABLE(DNAFrame, wxFrame)
 	EVT_MENU(wxID_EXIT, DNAFrame::OnExit)
 	EVT_MENU(wxID_NEW, DNAFrame::OnNew)
 	EVT_MENU(ID_AMINO_HIST, DNAFrame::OnAminoHist)
+    EVT_MENU(ID_PAIRWISE, DNAFrame::OnPairWiseAlignment)
 wxEND_EVENT_TABLE()
 
 DNAFrame::DNAFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -40,6 +43,7 @@ DNAFrame::DNAFrame(const wxString& title, const wxPoint& pos, const wxSize& size
 	menuFile->Append(wxID_NEW);
 	menuFile->Append(ID_AMINO_HIST, "Amino Acid Histogram...",
 					 "Create a histogram from a FASTA file.");
+    menuFile->Append(ID_PAIRWISE, "Amino Acid Pairwise Alignment...");
 	menuFile->Append(wxID_EXIT);
 	
 	wxMenuBar* menuBar = new wxMenuBar;
@@ -106,4 +110,27 @@ void DNAFrame::OnAminoHist(wxCommandEvent& event)
     mPanel->SetHistogramVariables(aminoAcidCount, translator.GetTotal(), translator.GetLargest().second, parser.GetHeader());
     
     mPanel->PaintNow();
+}
+
+void DNAFrame::OnPairWiseAlignment(wxCommandEvent &event)
+{
+    DNAAlignDlg alignDlg;
+    if(alignDlg.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    else if(alignDlg.ShowModal() != wxID_OK)
+    {
+        //throw exception
+    }
+    
+    std::string inputPathA, inputPathB, outputPath;
+    inputPathA = alignDlg.GetInputAPath();
+    inputPathB = alignDlg.GetInputBPath();
+    outputPath = alignDlg.GetOutputPath();
+    
+    wxBusyInfo wait("Please wait, calculating...");
+    
+    PairwiseAlignment alignment = PairwiseAlignment(inputPathA, inputPathB);
+    alignment.CalculateScore();
 }
